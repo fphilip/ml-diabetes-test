@@ -4,3 +4,5 @@
 /models/*.pkl
 /datasets/test.csv
 /*.iml
+*.ipynb
+*.pdf

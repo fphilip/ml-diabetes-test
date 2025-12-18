@@ -126,7 +126,8 @@ The model made {len(errors)} incorrect prediction(s):
 md_content += f"""
 ## Model Information
 
-- **Model Type:** GradientBoostingClassifier
+- **Model Type:** XGBClassifier (XGBoost)
+- **Hyperparameters:** n_estimators=300, learning_rate=0.05, max_depth=5, subsample=0.8, colsample_bytree=0.8, scale_pos_weight=1.86
 - **Preprocessing:** KNNImputer (k=5) + RobustScaler
 - **Test Dataset:** `datasets/test.csv`
 - **Artifacts Used:** `models/model.pkl`, `models/imputer.pkl`, `models/scaler.pkl`

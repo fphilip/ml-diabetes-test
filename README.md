@@ -142,8 +142,8 @@ La respuesta incluye:
 
 1.  **Clonar el Repositorio**
     ```bash
-    git clone [URL-DE-TU-REPOSITORIO-EN-GITHUB]
-    cd [NOMBRE-DEL-REPOSITORIO]
+    git clone https://github.com/fphilip/ml-diabetes-test.git
+    cd ml-diabetes-test
     ```
 
 2.  **Entrenar el Modelo (Primer Uso)**

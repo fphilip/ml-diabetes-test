@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 from sklearn.impute import KNNImputer
-from sklearn.ensemble import GradientBoostingClassifier
+from xgboost import XGBClassifier
 from sklearn.pipeline import Pipeline
 import joblib
 import os
@@ -37,8 +37,18 @@ imputer = KNNImputer(n_neighbors=5)
 scaler = RobustScaler()
 
 # Paso 3: Modelo de clasificación
-# Gradient Boosting ha demostrado ser el mejor modelo para este problema.
-model = GradientBoostingClassifier(random_state=42)
+# XGBoost - Ganador del análisis comparativo del notebook
+# Hiperparámetros optimizados mediante RandomizedSearchCV
+model = XGBClassifier(
+    n_estimators=300,           # Número de árboles (optimizado: 100-500)
+    learning_rate=0.05,         # Velocidad de aprendizaje (optimizado: 0.01-0.2)
+    max_depth=5,                # Profundidad máxima (optimizado: 3-10)
+    subsample=0.8,              # Muestreo de filas para evitar overfitting
+    colsample_bytree=0.8,       # Muestreo de columnas por árbol
+    scale_pos_weight=1.86,      # Balanceo de clases (ratio 65/35)
+    eval_metric='logloss',      # Métrica de evaluación
+    random_state=42
+)
 
 # Construcción del pipeline completo
 pipeline = Pipeline([
