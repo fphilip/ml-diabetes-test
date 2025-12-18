@@ -3,6 +3,7 @@
 .idea
 /models/*.pkl
 /datasets/test.csv
-/*.iml
+*.iml
 *.ipynb
 *.pdf
+
