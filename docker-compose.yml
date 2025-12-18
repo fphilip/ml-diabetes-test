@@ -1,0 +1,32 @@
+
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: diabetes_api
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./models:/app/models
+    networks:
+      - diabetes_net
+
+  frontend:
+    build: .
+    container_name: diabetes_frontend
+    command: streamlit run src/frontend.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - api
+    networks:
+      - diabetes_net
+
+networks:
+  diabetes_net:
+    driver: bridge
