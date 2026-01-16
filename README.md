@@ -24,7 +24,7 @@ El objetivo de este proyecto es proporcionar una herramienta funcional y despleg
 ├── requirements.txt        # Dependencias de Python.
 ├── README.md               # Este archivo.
 ├── models/                 # Artefactos del modelo (generados por train_model.py).
-│   ├── model.pkl           # Modelo GradientBoostingClassifier entrenado.
+│   ├── model.pkl           # Modelo XGBClassifier entrenado.
 │   ├── imputer.pkl         # KNNImputer para valores faltantes.
 │   └── scaler.pkl          # RobustScaler para normalizacion.
 ├── datasets/
@@ -178,7 +178,7 @@ python src/test_model.py
 ### Que hace el script de test
 
 1. **Carga los artefactos** del modelo entrenado desde `models/`:
-   - `model.pkl` - Modelo GradientBoostingClassifier
+   - `model.pkl` - Modelo XGBClassifier
    - `imputer.pkl` - KNNImputer para valores faltantes
    - `scaler.pkl` - RobustScaler para normalizacion
 
