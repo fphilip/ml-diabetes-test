@@ -9,7 +9,7 @@ El objetivo de este proyecto es proporcionar una herramienta funcional y despleg
 
 ### Componentes Clave
 
-- **Modelo de ML**: `Gradient Boosting Classifier` entrenado con el dataset "Pima Indians Diabetes".
+- **Modelo de ML**: `XGBoost` entrenado con el dataset "Pima Indians Diabetes".
 - **Pipeline de Preprocesamiento**: Imputación con `KNNImputer` y escalado con `RobustScaler`.
 - **Backend**: API REST desarrollada con **FastAPI**, que expone un endpoint `/predict`.
 - **Frontend**: Interfaz gráfica interactiva creada con **Streamlit**.
@@ -70,7 +70,7 @@ python src/train_model.py
 ```
 
 Esto genera los artefactos en `models/`:
-- `model.pkl` - Modelo GradientBoostingClassifier
+- `model.pkl` - Modelo XGBClassifier
 - `imputer.pkl` - KNNImputer para valores faltantes
 - `scaler.pkl` - RobustScaler para normalizacion
 
