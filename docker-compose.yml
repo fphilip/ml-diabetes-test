@@ -7,7 +7,7 @@ services:
     container_name: diabetes_api
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000
     ports:
-      - "8000:8000"
+      - "8500:8000"
     volumes:
       - ./src:/app/src
       - ./models:/app/models
@@ -22,6 +22,7 @@ services:
       - "8501:8501"
     volumes:
       - ./src:/app/src
+      - ./models:/app/models
     depends_on:
       - api
     networks:

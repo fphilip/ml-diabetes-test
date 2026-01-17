@@ -75,5 +75,12 @@ joblib.dump(pipeline.named_steps['model'], os.path.join(output_dir, 'model.pkl')
 joblib.dump(pipeline.named_steps['imputer'], os.path.join(output_dir, 'imputer.pkl'))
 joblib.dump(pipeline.named_steps['scaler'], os.path.join(output_dir, 'scaler.pkl'))
 
+# --- 6. Guardado de Datos para LIME ---
+# Guardar los datos de entrenamiento preprocesados para usar con LIME Explainer
+X_train_imputed = pipeline.named_steps['imputer'].transform(X_train)
+X_train_scaled = pipeline.named_steps['scaler'].transform(X_train_imputed)
+joblib.dump(X_train_scaled, os.path.join(output_dir, 'X_train_scaled.pkl'))
+joblib.dump(list(X.columns), os.path.join(output_dir, 'feature_names.pkl'))
+
 print("✅ Modelo y preprocesadores entrenados y guardados en la carpeta 'models/'.")
-print(f"Archivos guardados: model.pkl, imputer.pkl, scaler.pkl")
+print(f"Archivos guardados: model.pkl, imputer.pkl, scaler.pkl, X_train_scaled.pkl, feature_names.pkl")
