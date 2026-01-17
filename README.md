@@ -11,7 +11,8 @@ El objetivo de este proyecto es proporcionar una herramienta funcional y despleg
 
 - **Modelo de ML**: `eXtreme Gradient Boosting` entrenado con el dataset "Pima Indians Diabetes".
 - **Pipeline de Preprocesamiento**: Imputación con `KNNImputer` y escalado con `RobustScaler`.
-- **Backend**: API REST desarrollada con **FastAPI**, que expone un endpoint `/predict`.
+- **Interpretabilidad**: Explicaciones con **LIME** (Local Interpretable Model-agnostic Explanations).
+- **Backend**: API REST desarrollada con **FastAPI**, que expone endpoints `/predict` y `/explain`.
 - **Frontend**: Interfaz gráfica interactiva creada con **Streamlit**.
 - **Orquestación**: Docker y Docker Compose para crear un entorno reproducible y aislado.
 
@@ -26,7 +27,9 @@ El objetivo de este proyecto es proporcionar una herramienta funcional y despleg
 ├── models/                 # Artefactos del modelo (generados por train_model.py).
 │   ├── model.pkl           # Modelo XGBClassifier entrenado.
 │   ├── imputer.pkl         # KNNImputer para valores faltantes.
-│   └── scaler.pkl          # RobustScaler para normalizacion.
+│   ├── scaler.pkl          # RobustScaler para normalizacion.
+│   ├── X_train_scaled.pkl  # Datos de entrenamiento escalados (para LIME).
+│   └── feature_names.pkl   # Nombres de las caracteristicas (para LIME).
 ├── datasets/
 │   ├── diabetes.csv        # Dataset original de entrenamiento (Pima Indians).
 │   └── test.csv            # Dataset de prueba para validacion del modelo.
@@ -34,11 +37,11 @@ El objetivo de este proyecto es proporcionar una herramienta funcional y despleg
 │   └── test_results_*.md   # Reportes con timestamp de cada ejecucion.
 ├── docs/
 │   └── images/             # Capturas de pantalla para documentacion.
-│       ├── 01_api_welcome.png
-│       ├── 02_api_docs.png
-│       ├── 03_api_predict_endpoint.png
-│       ├── 04_api_try_it_out.png
-│       └── 05_api_response.png
+│       ├── 06_frontend_empty.png
+│       ├── 08_frontend_p10_result.png
+│       ├── 10_frontend_p11_result.png
+│       ├── 12_frontend_p12_result.png
+│       └── 14_frontend_p13_result.png
 ├── scripts/
 │   └── take_screenshots.py # Script Playwright para generar capturas.
 └── src/
@@ -73,6 +76,8 @@ Esto genera los artefactos en `models/`:
 - `model.pkl` - Modelo XGBClassifier
 - `imputer.pkl` - KNNImputer para valores faltantes
 - `scaler.pkl` - RobustScaler para normalizacion
+- `X_train_scaled.pkl` - Datos de entrenamiento escalados (para LIME)
+- `feature_names.pkl` - Nombres de las caracteristicas (para LIME)
 
 #### Paso 3: Ejecutar la API
 
@@ -90,44 +95,53 @@ python -m uvicorn src.main:app --reload --port 8000
 
 Abre tu navegador en: **http://localhost:8000/docs**
 
+> Para una guia detallada de la API, consulta [docs/API_GUIDE.md](docs/API_GUIDE.md)
+
 ---
 
-### Guia Visual de la API
+### Guia Visual del Frontend (Streamlit)
 
-#### 1. Pagina de bienvenida
+El frontend permite evaluar pacientes de forma interactiva con explicaciones LIME.
 
-Al acceder a `http://localhost:8000/` veras el mensaje de bienvenida:
+#### Formulario de Evaluacion
 
-![API Welcome](docs/images/01_api_welcome.png)
+Al acceder a `http://localhost:8501` veras el formulario de evaluacion:
 
-#### 2. Documentacion Swagger (OpenAPI)
+![Frontend Empty](docs/images/06_frontend_empty.png)
 
-Accede a `http://localhost:8000/docs` para ver la documentacion interactiva:
+#### Casos de Ejemplo (Preset)
 
-![API Docs](docs/images/02_api_docs.png)
+El sistema incluye 4 pacientes predefinidos del dataset para demostrar las capacidades del modelo:
 
-#### 3. Endpoint POST /predict
+| Preset | Diagnostico Real | Color Boton | Descripcion |
+|--------|------------------|-------------|-------------|
+| P10 | Diabetico | Verde claro | Riesgo moderado |
+| P11 | Sano | Rojo | Alto riesgo (falso positivo esperado) |
+| P12 | Diabetico | Naranja | Riesgo alto |
+| P13 | Sano | Verde | Bajo riesgo |
 
-Haz click en el endpoint `POST /predict` para expandirlo:
+#### Paciente P10 - Diabetico (Riesgo moderado)
 
-![Predict Endpoint](docs/images/03_api_predict_endpoint.png)
+![Frontend P10 Result](docs/images/08_frontend_p10_result.png)
 
-#### 4. Probar el endpoint (Try it out)
+#### Paciente P11 - Sano (Alto riesgo)
 
-Haz click en **"Try it out"** para habilitar el modo de prueba:
+![Frontend P11 Result](docs/images/10_frontend_p11_result.png)
 
-![Try it out](docs/images/04_api_try_it_out.png)
+#### Paciente P12 - Diabetico (Riesgo alto)
 
-#### 5. Ejecutar prediccion
+![Frontend P12 Result](docs/images/12_frontend_p12_result.png)
 
-Haz click en **"Execute"** para enviar la peticion y ver la respuesta:
+#### Paciente P13 - Sano (Bajo riesgo)
 
-![API Response](docs/images/05_api_response.png)
+![Frontend P13 Result](docs/images/14_frontend_p13_result.png)
 
-La respuesta incluye:
-- `prediction`: "Diabetic" o "Healthy"
-- `probability`: Probabilidad de diabetes (0-1)
-- `risk_level`: "High" o "Low"
+#### Interpretacion con LIME
+
+Cada prediccion incluye una explicacion LIME que muestra:
+- **Barras verdes**: Caracteristicas que aumentan la probabilidad de diabetes
+- **Barras rojas**: Caracteristicas que disminuyen la probabilidad de diabetes
+- **Tabla detallada**: Valores numericos de cada contribucion
 
 ---
 
